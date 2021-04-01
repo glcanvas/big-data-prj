@@ -1,25 +1,23 @@
-import com.github.kittinunf.fuel.*;
-import com.github.kittinunf.fuel.json.*;
+import com.github.kittinunf.fuel.*
+import com.github.kittinunf.fuel.json.*
+import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 import java.time.Instant
 import java.util.*
 import kotlin.math.min
 
-
-
-// 0 -- 11 dec 2010
-// 1 -- 5 dec 2010
 open class VkFetcher constructor(private val publicKey: String,
                                  private val groupName: String,
                                  private val dateFrom: Instant) {
 
     companion object {
-        private val apiVersion = Pair("v", "5.52")
+        private val apiVersion = Pair("v", "5.130")
         const val MAX_POSTS_IN_REQUEST = 100
     }
 
-    fun fetchLocally(iterations: Int = 10): List<JSONObject> {
+    fun fetchLocally(iterations: Int = 10): List<PostStrings> {
         var actualPostCount = fetchPostCount()
         var lastPostOffset = findOffsetByDate(dateFrom)
         var lastTime = dateFrom
@@ -46,7 +44,7 @@ open class VkFetcher constructor(private val publicKey: String,
                 actualPostCount = pair.second
             }
         }
-        return data
+        return data.map { toPost(it) }
     }
 
     private fun syncUp(lastTime: Instant): Pair<Int, Int> {
@@ -105,31 +103,16 @@ open class VkFetcher constructor(private val publicKey: String,
     }
 }
 
+fun saveImage(byteArray: ByteArray, name: String) = CoroutineScope(Dispatchers.IO).launch {
+    val fw = File("images/$name.png")
+    fw.writeBytes(byteArray)
+}
+
 
 fun main() {
-
     val fetcher = VkFetcher("8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a",
             "sabatonclub",
             Instant.parse("2017-05-05T20:12:00.00Z"))
-
-    val res = fetcher.fetchLocally(2)
-    for (i in res) {
-        print(i)
-    }
-    /*val fetcher = VkFetcher("8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a")
-    var r = fetcher.findOffsetByDate("sabatonclub", Instant.ofEpochSecond(1291481911))
-    System.out.println(r)
-
-     */
-
-
-    /*
-val (a, b, c) = Fuel.get("https://baneks.site/tag/мужик/",
-        listOf(Pair("p", 2))
-).responseString()
-
-System.out.println(c)
-*/
-
+    val res = toPosts(fetcher.fetchLocally(10))
 
 }
