@@ -1,30 +1,42 @@
-import com.github.kittinunf.fuel.*
-import com.github.kittinunf.fuel.json.*
-import kotlinx.coroutines.*
+package vk
+
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.json.FuelJson
+import data.PostStrings
+import data.VkProperties
+import org.apache.log4j.Logger
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.time.Instant
 import java.util.*
-import kotlin.math.min
 
-open class VkFetcher constructor(private val publicKey: String,
-                                 private val groupName: String,
-                                 private val dateFrom: Instant) {
+class VkDataFetcher constructor(vkProperties: VkProperties) {
+    private val logger: Logger = Logger.getLogger(VkDataFetcher::class.java)
+
+    private var dateFrom = vkProperties.dateFrom
+    private val groupName = vkProperties.groupName
+    private val publicKey = vkProperties.publicKey
 
     companion object {
         private val apiVersion = Pair("v", "5.130")
         const val MAX_POSTS_IN_REQUEST = 100
     }
 
-    fun fetchLocally(iterations: Int = 10): List<PostStrings> {
+    fun safeFetchLocally(iterations: Int = 10): Pair<Instant, List<PostStrings>> {
+        return try {
+            fetchLocally(iterations)
+        } catch (e: Exception) {
+            Pair(Instant.MIN, listOf())
+        }
+    }
+
+    private fun fetchLocally(iterations: Int = 10): Pair<Instant, List<PostStrings>> {
         var actualPostCount = fetchPostCount()
         var lastPostOffset = findOffsetByDate(dateFrom)
-        var lastTime = dateFrom
-
         val data = LinkedList<JSONObject>()
-
+        logger.info("$groupName, begin, actualPostCount: $actualPostCount, lastPostOffset: $lastPostOffset")
         for (i in 1..iterations) {
+            lastPostOffset -= Math.min(lastPostOffset, MAX_POSTS_IN_REQUEST) // well its required for moving dateFrom pointer
             if (lastPostOffset < 0) {
                 break
             }
@@ -33,18 +45,21 @@ open class VkFetcher constructor(private val publicKey: String,
             if (items.isEmpty()) {
                 break
             }
-
+            logger.info("$groupName, fetched ${items.size} elements")
             if (postCount == actualPostCount) {
                 data.addAll(items)
                 lastPostOffset -= items.size
-                lastTime = Instant.ofEpochSecond((items[0]["date"] as Int).toLong())
+                dateFrom = Instant.ofEpochSecond((items[0]["date"] as Int).toLong())
+                logger.info("$groupName, fetched data correctly, dateFrom: $dateFrom, lastPostOffset: $lastPostOffset")
             } else {
-                val pair = syncUp(lastTime)
+                val pair = syncUp(dateFrom)
                 lastPostOffset = pair.first
                 actualPostCount = pair.second
+                logger.info("$groupName, posts count changed, lastPostOffset: $lastPostOffset, actualPostCount: $actualPostCount")
             }
         }
-        return data.map { toPost(it) }
+        logger.info("$groupName, finished, date: $dateFrom")
+        return Pair(dateFrom, data.map { PostStrings.toPost(it) })
     }
 
     private fun syncUp(lastTime: Instant): Pair<Int, Int> {
@@ -85,11 +100,11 @@ open class VkFetcher constructor(private val publicKey: String,
             }
         }
 
-        return min(r, fetchPostCount() - 1)
+        return Math.min(r, fetchPostCount() - 1)
     }
 
     private fun fetchRawData(count: Int, offset: Int): JSONObject {
-        val (_, _, c) = Fuel.get(
+        val request = Fuel.get(
                 "https://api.vk.com/method/wall.get",
                 listOf(
                         Pair("domain", groupName),
@@ -98,21 +113,13 @@ open class VkFetcher constructor(private val publicKey: String,
                         Pair("offset", offset),
                         apiVersion
                 )
-        ).responseString()
-        return FuelJson(c.get()).obj()["response"] as JSONObject
+        )
+        val (_, _, c) = request.responseString()
+        try {
+            return FuelJson(c.get()).obj()["response"] as JSONObject
+        } catch(e: Exception) {
+            logger.error("Exception: $e, request: $request, response: $c")
+            throw e
+        }
     }
-}
-
-fun saveImage(byteArray: ByteArray, name: String) = CoroutineScope(Dispatchers.IO).launch {
-    val fw = File("images/$name.png")
-    fw.writeBytes(byteArray)
-}
-
-
-fun main() {
-    val fetcher = VkFetcher("8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a",
-            "sabatonclub",
-            Instant.parse("2017-05-05T20:12:00.00Z"))
-    val res = toPosts(fetcher.fetchLocally(10))
-
 }

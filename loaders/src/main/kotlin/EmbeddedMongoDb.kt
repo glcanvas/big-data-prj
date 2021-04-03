@@ -5,7 +5,6 @@ import de.flapdoodle.embed.mongo.config.Net
 import de.flapdoodle.embed.mongo.distribution.Version
 import de.flapdoodle.embed.process.runtime.Network
 import java.io.Closeable
-import com.mongodb.MongoClient
 import org.bson.Document
 
 
@@ -37,27 +36,3 @@ class EmbeddedMongoDb : Closeable {
 
 }
 
-
-fun main() {
-
-    val a = EmbeddedMongoDb()
-
-    var mongoClient = MongoClient("localhost", a.getPort())
-    mongoClient.use {
-        val db = it.getDatabase("db")
-        db.createCollection("lastIdx")
-        db.getCollection("lastIdx")
-                .insertOne(Document().append("name", "sabaton").append("date", "2020"))
-    }
-
-    mongoClient = MongoClient("localhost", a.getPort())
-    mongoClient.use {
-        val db = it.getDatabase("db")
-        for(v in db.getCollection("lastIdx").find()) {
-            println(v)
-        }
-    }
-
-
-
-}
