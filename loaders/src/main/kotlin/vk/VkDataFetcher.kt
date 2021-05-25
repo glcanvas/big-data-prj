@@ -33,7 +33,7 @@ class VkDataFetcher constructor(vkProperties: VkProperties) {
     private fun fetchLocally(iterations: Int = 10): Pair<Instant, List<PostStrings>> {
         var actualPostCount = fetchPostCount()
         var lastPostOffset = findOffsetByDate(dateFrom)
-        val data = LinkedList<JSONObject>()
+        val data = ArrayList<JSONObject>()
         logger.info("$groupName, begin, actualPostCount: $actualPostCount, lastPostOffset: $lastPostOffset")
         for (i in 1..iterations) {
             lastPostOffset -= Math.min(lastPostOffset, MAX_POSTS_IN_REQUEST) // well its required for moving dateFrom pointer
