@@ -1,4 +1,4 @@
-package vk.comments.dao
+package vk.dao
 
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName

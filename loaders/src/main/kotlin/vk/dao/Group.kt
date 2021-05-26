@@ -1,4 +1,4 @@
-package vk.posts.dao
+package vk.dao
 
 import com.google.gson.annotations.SerializedName
 

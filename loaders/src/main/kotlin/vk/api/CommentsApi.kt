@@ -3,8 +3,9 @@ package vk.api
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import vk.comments.dao.CommentResponse
-import vk.utils.BaseResponse
+import vk.dao.Comment
+import vk.dao.BaseResponse
+import vk.dao.ResponseHolder
 
 interface CommentsApi {
 
@@ -19,5 +20,5 @@ interface CommentsApi {
             @Query("sort") sort: String = "asc",
             @Query("preview_length") previewLength: Int = 0,
             @Query("extended") extended: Int = 1
-    ): Call<BaseResponse<CommentResponse>>
+    ): Call<ResponseHolder<BaseResponse<Comment>>>
 }

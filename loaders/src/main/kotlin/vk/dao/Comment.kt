@@ -1,6 +1,5 @@
-package vk.posts.dao
+package vk.dao
 
-/*
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 import vk.deserializers.CountToIntDeserializer
@@ -8,22 +7,21 @@ import vk.deserializers.IntToInstantDeserializer
 import vk.deserializers.PathToUrlDeserializer
 import java.time.Instant
 
-
-data class PostPlain(
+data class Comment(
         @SerializedName("id")
-        val postId: Int,
+        var commentId: Int,
+        @SerializedName("from_id")
+        var authorId: Int,
         @JsonAdapter(IntToInstantDeserializer::class)
-        val date: Instant,
-        val wallId: Int,
-        val text: String,
+        private var date: Instant,
+        var text: String,
         @JsonAdapter(CountToIntDeserializer::class)
         val likes: Int,
-        @JsonAdapter(CountToIntDeserializer::class)
-        val reposts: Int,
-        @JsonAdapter(CountToIntDeserializer::class)
-        val views: Int,
         @SerializedName("attachments")
         @JsonAdapter(PathToUrlDeserializer::class)
         val images: List<String>
-)
- */
+) : Datable {
+    override fun getDate(): Instant {
+        return date
+    }
+}
