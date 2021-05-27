@@ -3,17 +3,22 @@ package com.saver.dao
 
 import dev.morphia.annotations.*
 import java.time.Instant
+import java.util.*
 
 @Entity("Comment")
-@Indexes(Index(fields = [Field("commentId"), Field("wallId")], options = IndexOptions(unique = true)))
+@Indexes(Index(fields = [Field("commentId"), Field("wallId"), Field("postId")],
+        options = IndexOptions(unique = true)))
 data class Comment(
         @Id
         var id: Int,
         var commentId: Int,
+        var postId: Int,
         var wallId: Int,
         var authorId: Int,
         var date: Instant,
         var text: String,
-        val likes: Int,
-        val images: List<ByteArray>
-)
+        var likes: Int,
+        var images: List<ByteArray>
+) {
+        constructor() : this(0, 0, 0, 0, 0, Instant.MIN, "", 0, Collections.emptyList())
+}

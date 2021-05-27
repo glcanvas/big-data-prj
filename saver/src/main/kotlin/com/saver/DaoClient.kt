@@ -1,6 +1,7 @@
 package com.saver
 
 import com.mongodb.MongoClient
+import com.saver.dao.Comment
 import com.saver.dao.CommentMetaData
 import com.saver.dao.Post
 import com.saver.dao.PostMetaData
@@ -28,7 +29,7 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
         return datastore.save(t)
     }
 
-    fun <T> updateMetaPost(key: Int, updatedLastTime: Instant) {
+    fun updateMetaPost(key: Int, updatedLastTime: Instant) {
         val query = datastore.createQuery(PostMetaData::class.java)
                 .field("wallId")
                 .equal(key);
@@ -37,7 +38,7 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
         datastore.update(query, update);
     }
 
-    fun <T> updateMetaComment(wallId: Int, postId: Int, updatedLastTime: Instant) {
+    fun updateMetaComment(wallId: Int, postId: Int, updatedLastTime: Instant) {
         val query = datastore.createQuery(CommentMetaData::class.java)
                 .field("wallId")
                 .equal(wallId)
@@ -52,6 +53,42 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
         return datastore.createQuery(Post::class.java)
                 .field("wallId")
                 .equal(wallId)
+                .find()
+                .toList()
+    }
+
+    fun getComment(wallId: Int, postId: Int): List<Comment> {
+        return datastore.createQuery(Comment::class.java)
+                .field("wallId")
+                .equal(wallId)
+                .field("postId")
+                .equal(postId)
+                .find()
+                .toList()
+    }
+
+    fun getComment(wallId: Int): List<Comment> {
+        return datastore.createQuery(Comment::class.java)
+                .field("wallId")
+                .equal(wallId)
+                .find()
+                .toList()
+    }
+
+    fun getPostMeta(wallId: Int): List<PostMetaData> {
+        return datastore.createQuery(PostMetaData::class.java)
+                .field("wallId")
+                .equal(wallId)
+                .find()
+                .toList()
+    }
+
+    fun getCommentMeta(wallId: Int, postId: Int): List<CommentMetaData> {
+        return datastore.createQuery(CommentMetaData::class.java)
+                .field("wallId")
+                .equal(wallId)
+                .field("postId")
+                .equal(postId)
                 .find()
                 .toList()
     }

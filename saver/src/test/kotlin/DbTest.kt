@@ -2,6 +2,7 @@ import com.mongodb.MongoClient
 import com.saver.DaoClient
 import com.saver.dao.CommentMetaData
 import com.saver.dao.Post
+import com.saver.dao.PostMetaData
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -45,6 +46,26 @@ class DbTest {
             client.put(
                     CommentMetaData(2, 123, 1, Instant.parse("2020-01-01T01:01:01.000Z")))
         }
+        client.close()
+    }
+
+    @Test
+    fun addGetTest() {
+        val client = DaoClient("localhost", port)
+        var p1 = client.put(Post(1, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1,1, Collections.emptyList()))
+        var p2 = client.put(Post(2, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1,1, Collections.emptyList()))
+        val posts = client.getPost(1)
+        Assertions.assertEquals(2, posts.size)
+        client.close()
+    }
+
+    @Test
+    fun addUpdateTest() {
+        val client = DaoClient("localhost", port)
+        client.put(PostMetaData(1, "q", Instant.parse("2020-01-01T01:01:01.000Z")))
+        client.updateMetaPost(1, Instant.parse("2021-01-01T01:01:01.000Z"))
+        val meta = client.getPostMeta(1)[0]
+        Assertions.assertEquals(Instant.parse("2021-01-01T01:01:01.000Z"), meta.lastTime)
         client.close()
     }
 
