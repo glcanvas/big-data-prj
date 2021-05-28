@@ -4,10 +4,9 @@ package vk.kafka.pojo
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serializer
-import vk.kafka.mapper.Typable
 import java.lang.IllegalArgumentException
 
-data class ObjectHolder(val t: Typable?) : Deserializer<ObjectHolder>, Serializer<ObjectHolder> {
+class ObjectHolder(val t: Typable?) : Deserializer<ObjectHolder>, Serializer<ObjectHolder> {
 
     constructor() : this(null)
 

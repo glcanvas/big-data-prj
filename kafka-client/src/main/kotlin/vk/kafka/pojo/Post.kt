@@ -1,7 +1,5 @@
 package vk.kafka.pojo
 
-import org.apache.kafka.common.serialization.Serializer
-import vk.kafka.mapper.Typable
 import java.time.Instant
 import java.util.*
 

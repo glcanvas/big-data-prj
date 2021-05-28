@@ -1,21 +1,21 @@
 package vk.kafka
 
-import org.json.JSONObject
-import vk.kafka.pojo.Post
-import java.time.Instant
+import com.google.common.collect.ImmutableMap
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.serialization.StringSerializer
+import vk.kafka.pojo.ObjectHolder
 
-class Publisher {
-    // private val a: KafkaProducer
-    init {}
+class Publisher(bootstrapServer: String, private val topic: String) {
+    private val producer = KafkaProducer(ImmutableMap.of<String?, Any?>(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            bootstrapServer),
+            StringSerializer(),
+            ObjectHolder())
 
-}
-
-fun main() {
-    val array = ByteArray(228)
-    array[0] = 1
-    val p = Post(1, 1, Instant.MIN, "dsd", 0, 0, 0, listOf(ByteArray(123)))
-    val jo = JSONObject()
-    jo.put("DD", JSONObject(p));
-
-    println(jo)
+    fun publish(data: ObjectHolder) {
+        val future = producer.send(ProducerRecord(topic, "key", data))
+        future.get()
+    }
 }

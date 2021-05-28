@@ -1,4 +1,4 @@
-package vk.kafka.mapper
+package vk.kafka.pojo
 
 import java.lang.IllegalArgumentException
 
