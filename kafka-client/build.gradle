@@ -1,0 +1,42 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'application'
+}
+
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
+    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
+
+    implementation group: 'org.apache.kafka', name: 'kafka_2.13', version: '2.8.0'
+
+
+
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+    implementation group: 'org.json', name: 'json', version: '20160810'
+    implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    testImplementation 'info.batey.kafka:kafka-unit:1.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+}
+
+

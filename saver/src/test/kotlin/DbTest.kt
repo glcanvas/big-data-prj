@@ -1,4 +1,3 @@
-import com.mongodb.MongoClient
 import com.saver.DaoClient
 import com.saver.dao.CommentMetaData
 import com.saver.dao.Post
@@ -7,7 +6,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import java.lang.RuntimeException
 import java.time.Instant
 import java.util.*
