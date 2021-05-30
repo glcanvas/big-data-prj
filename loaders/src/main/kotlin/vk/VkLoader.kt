@@ -4,7 +4,9 @@ import org.apache.log4j.Logger
 import vk.dao.Datable
 import java.lang.IllegalStateException
 import java.time.Instant
+import java.util.*
 import java.util.stream.Collectors.toList
+import kotlin.collections.ArrayDeque
 import kotlin.math.max
 import kotlin.math.min
 
@@ -19,13 +21,13 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
     }
 
     private fun initializeOffset(): Int {
-        val defResponse = apiCaller.call(Int.MAX_VALUE, 1).response
+        val defResponse = apiCaller.call(Int.MAX_VALUE, 1).response ?: return -1
         val count = defResponse.count
         var r = count
         var l = -1
         while (l < r - 1) {
             val m = (r + l) / 2
-            val response = apiCaller.call(m, 1).response
+            val response = apiCaller.call(m, 1).response ?: return -1
             val items = response.items
             if (items.isEmpty()) {
                 r = m
@@ -56,7 +58,7 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
         val queue = ArrayDeque<T>()
 
         override fun hasNext(): Boolean {
-            return offset != 0 || !queue.isEmpty()
+            return offset > 0 || !queue.isEmpty()
         }
 
         override fun next(): T {
@@ -64,8 +66,14 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
                 throw IllegalStateException("Iterator finished")
             }
             if (queue.isEmpty()) {
-                offset = max(0, offset - MAX_BATCH_SIZE)
-                val posts: List<T> = apiCaller.call(offset, MAX_BATCH_SIZE).response.items
+                offset -= MAX_BATCH_SIZE
+                var cnt = MAX_BATCH_SIZE
+                if (offset < 0) {
+                    offset = 0
+                    cnt = Math.abs(offset)
+                }
+                val posts: List<T> = apiCaller.call(offset, cnt).response?.items ?: Collections.emptyList()
+                posts
                         .stream()
                         .filter { it.getDate() > from }
                         .collect(toList())

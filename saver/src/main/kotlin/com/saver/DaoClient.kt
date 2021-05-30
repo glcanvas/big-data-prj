@@ -25,8 +25,10 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
         return datastore.save(t)
     }
 
-    fun <T> put(t: List<T>): Iterable<Key<T>> {
-        return datastore.save(t)
+
+    fun putPost(post: List<Post>) {
+
+
     }
 
     fun updateMetaPost(key: Int, updatedLastTime: Instant) {

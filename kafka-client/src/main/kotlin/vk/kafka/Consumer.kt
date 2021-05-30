@@ -4,11 +4,15 @@ import com.google.common.collect.ImmutableMap
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
-import vk.kafka.pojo.ObjectHolder
+import org.apache.log4j.Logger
+import vk.kafka.utils.ObjectHolderProcessor
+import vk.kafka.utils.OnTypeElement
+import java.io.Closeable
 import java.time.Duration
 import java.util.*
 
-class Consumer(bootstrapServer: String, topic: String) {
+class Consumer(bootstrapServer: String, topic: String): AutoCloseable {
+    private val log: Logger = Logger.getLogger(Consumer::class.java)
     private val consumer = KafkaConsumer(
             ImmutableMap.of<String, Any>(
                     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -18,15 +22,25 @@ class Consumer(bootstrapServer: String, topic: String) {
                     ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
                     "earliest"),
             StringDeserializer(),
-            ObjectHolder())
+            ObjectHolderProcessor())
 
     init {
         consumer.subscribe(Collections.singleton(topic))
+        log.debug("Consumer started: bootstrap: $bootstrapServer, topic: $topic")
     }
 
-    fun fetch() {
+    fun fetch(callable: OnTypeElement): Int {
+        var cnt = 0
         for (item in consumer.poll(Duration.ofSeconds(1))) {
-
+            callable.onElement(item.value().t)
+            log.debug("Message processed: key= ${item.key()}, value=${item.value()}")
+            cnt++
         }
+        log.debug("Fetched messages: $cnt")
+        return cnt
+    }
+
+    override fun close() {
+        consumer.close()
     }
 }

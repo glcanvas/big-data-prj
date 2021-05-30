@@ -1,5 +1,5 @@
 package vk.dao
 
 data class ResponseHolder<T>(
-        val response: T
+        val response: T?
 )
