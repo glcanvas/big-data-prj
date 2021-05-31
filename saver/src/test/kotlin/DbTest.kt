@@ -1,7 +1,7 @@
-import com.saver.DaoClient
-import com.saver.dao.CommentMetaData
-import com.saver.dao.Post
-import com.saver.dao.PostMetaData
+import vk.saver.DaoClient
+import vk.saver.dao.CommentMetaData
+import vk.saver.dao.Post
+import vk.saver.dao.PostMetaData
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -36,13 +36,13 @@ class DbTest {
     fun simpleTest2() {
         val client = DaoClient("localhost", port)
         val post = client.put(
-                CommentMetaData(1, 123, 1, Instant.parse("2020-01-01T01:01:01.000Z"))
+                CommentMetaData("1", 123, 1, Instant.parse("2020-01-01T01:01:01.000Z"))
         )
         Assertions.assertEquals(1, post.id)
 
         Assertions.assertThrows(RuntimeException::class.java) {
             client.put(
-                    CommentMetaData(2, 123, 1, Instant.parse("2020-01-01T01:01:01.000Z")))
+                    CommentMetaData("2", 123, 1, Instant.parse("2020-01-01T01:01:01.000Z")))
         }
         client.close()
     }
