@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.containers.Network
 import org.testcontainers.lifecycle.Startables
+import vk.cron.CronLauncher
 import vk.kafka.Publisher
 import vk.kafka.pojo.ObjectHolder
 import vk.kafka.pojo.RequestPost
@@ -38,20 +39,17 @@ class IntegrationTest {
         val a = kafkaContainer.bootstrapServers
         val loader = LoadLauncher(key, a)
         val saver = SaverLauncher(a, "localhost", mongoDb.getPort())
+        val cron = CronLauncher(a, "/Users/nduginets/IdeaProjects/big-data-prj/integration/src/test/resources/properties.properties", "localhost", mongoDb.getPort())
 
         val loaderFuture = loader.run()
         val saverFuture = saver.run()
-
-
-        val publisher = Publisher(a, "t1")
-        publisher.publish(ObjectHolder(RequestPost(-86529522, Instant.MIN)))
-
-        val client = MongoClient("localhost", mongoDb.getPort())
-        client.getDatabase("FFF")
+        val cronFuture = cron.run()
         Thread.sleep(TimeUnit.SECONDS.toMillis(10))
         loader.close()
         saver.close()
+        cron.close()
         loaderFuture.get()
         saverFuture.get()
+        cronFuture.get()
     }
 }

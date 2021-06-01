@@ -46,7 +46,7 @@ abstract class AbstractApp(kafkaBootstrap: String) : AutoCloseable {
         return completed
     }
 
-    private fun createTask(r: Runnable) {
+    protected fun createTask(r: Runnable) {
         threadPool.submit {
             while (!isExit.get()) {
                 try {

@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-version 'unspecified'
+version '1'
 
 repositories {
     mavenCentral()
@@ -17,30 +17,18 @@ compileKotlin {
     }
 }
 
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
 
-    implementation 'dev.morphia.morphia:core:1.6.1'
-
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.2.17'
+    implementation 'org.mongodb:bson:4.2.2'
     implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation 'dev.morphia.morphia:core:1.6.1'
     implementation project(":kafka-client")
-    implementation project(":loaders")
     implementation project(":saver")
-    implementation project(":jvm-cron")
 
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
-    testImplementation "org.testcontainers:testcontainers:1.15.3"
-    testImplementation "org.testcontainers:kafka:1.15.3"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-}
 
-test {
-    useJUnitPlatform()
 }

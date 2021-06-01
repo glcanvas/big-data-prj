@@ -22,7 +22,7 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
 
     private val vkApi = VkApi()
 
-    private val sendQueue = LinkedBlockingQueue<Typable>()
+    private lateinit var sendQueue: BlockingQueue<Typable>
 
     private val worker = object : DefaultOnTypeElement {
         private val mapper = Mapper()
@@ -37,7 +37,7 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
             for (p in loader) {
                 cnt++
                 sendQueue.add(errorFreeSupplier(p) { mapper.map(p) })
-                if(cnt > 100) {
+                if(cnt > 500) {
                     break
                 }
             }
@@ -63,10 +63,8 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
 
     override fun makeAction(fromKafka: BlockingQueue<Typable>, toKafka: BlockingQueue<Typable>) {
         val item = fromKafka.poll(timeout_millis, time_out) ?: return
+        sendQueue = toKafka
         worker.onElement(item)
-        while (sendQueue.isNotEmpty()) {
-            toKafka.add(sendQueue.poll())
-        }
     }
 
     override fun initialize() {
