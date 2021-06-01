@@ -54,9 +54,11 @@ abstract class AbstractApp(kafkaBootstrap: String) : AutoCloseable {
                 } catch (i: InterruptedException) {
                     isExit.set(true)
                     Thread.currentThread().interrupt()
-                    log.error("Interrupted occurred while sending data to kafka, stopping", i)
+                    println("Interrupted occurred while sending data to kafka, stopping $i")
+                    println(i)
                 } catch (t: Throwable) {
-                    log.error("Exception occurred while sending data to kafka", t)
+                    println("Exception occurred while sending data to kafka $t")
+                    println(t)
                 }
             }
             completed.complete(null)
@@ -74,8 +76,11 @@ abstract class AbstractApp(kafkaBootstrap: String) : AutoCloseable {
             try {
                 cl.run()
             } catch (t: Throwable) {
-                log.error("Exception occurred while closing resource", t)
+                println("Exception occurred while closing resource $t")
+                println(t)
             }
         }
+        threadPool.shutdown()
+        threadPool.shutdownNow()
     }
 }

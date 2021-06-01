@@ -18,13 +18,13 @@ class Publisher(bootstrapServer: String, private val topic: String) : AutoClosea
             ObjectHolderProcessor())
 
     init {
-        log.debug("Publisher started: boostrap: $bootstrapServer, topi: $topic")
+        println("Publisher started: boostrap: $bootstrapServer, topi: $topic")
     }
 
     fun publish(data: ObjectHolder) {
         val future = producer.send(ProducerRecord(topic, "key", data))
         val res = future.get()
-        log.debug("Message sent: data: $data, resp= $res")
+        println("Message sent: data: $data, resp= $res")
     }
 
     override fun close() {

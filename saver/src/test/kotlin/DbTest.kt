@@ -38,7 +38,7 @@ class DbTest {
         val post = client.put(
                 CommentMetaData("1", 123, 1, Instant.parse("2020-01-01T01:01:01.000Z"))
         )
-        Assertions.assertEquals(1, post.id)
+        Assertions.assertEquals("1", post.id)
 
         Assertions.assertThrows(RuntimeException::class.java) {
             client.put(

@@ -3,4 +3,5 @@ include 'app'
 include 'loaders'
 include 'saver'
 include 'kafka-client'
+include 'integration'
 

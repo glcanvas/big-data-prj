@@ -26,17 +26,17 @@ class Consumer(bootstrapServer: String, topic: String): AutoCloseable {
 
     init {
         consumer.subscribe(Collections.singleton(topic))
-        log.debug("Consumer started: bootstrap: $bootstrapServer, topic: $topic")
+        println("Consumer started: bootstrap: $bootstrapServer, topic: $topic")
     }
 
     fun fetch(callable: OnTypeElement): Int {
         var cnt = 0
         for (item in consumer.poll(Duration.ofSeconds(1))) {
             callable.onElement(item.value().t)
-            log.debug("Message processed: key= ${item.key()}, value=${item.value()}")
+            println("Message processed: key= ${item.key()}, value=${item.value()}")
             cnt++
         }
-        log.debug("Fetched messages: $cnt")
+        println("Fetched messages: $cnt")
         return cnt
     }
 

@@ -13,8 +13,10 @@ import vk.loader.dao.Comment
 import vk.loader.dao.Post
 import vk.loader.dao.ResponseHolder
 import vk.loader.utils.Mapper
+import java.util.*
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.function.Supplier
 
 class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
 
@@ -31,8 +33,13 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
                 }
             }
             val loader = VkLoader(postCaller, item.getLastTime())
+            var cnt = 0
             for (p in loader) {
-                sendQueue.add(mapper.map(p))
+                cnt++
+                sendQueue.add(errorFreeSupplier(p) { mapper.map(p) })
+                if(cnt > 100) {
+                    break
+                }
             }
         }
 
@@ -43,8 +50,13 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
                 }
             }
             val loader = VkLoader(commentCaller, item.getLastTime())
+            var cnt = 0
             for (c in loader) {
-                sendQueue.add(mapper.map(c, item.postId, item.wallId))
+                cnt++
+                sendQueue.add(errorFreeSupplier(c) {mapper.map(c, item.postId, item.wallId)})
+                if(cnt > 100) {
+                    break
+                }
             }
         }
     }
@@ -65,4 +77,14 @@ class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
         vkApi.close()
     }
 
+    private fun <V, T> errorFreeSupplier(v: V, s: Supplier<T>): T? {
+        try {
+            return s.get()
+        } catch (t: Throwable) {
+            print("Exception while process data $v")
+            println(t)
+            println(Arrays.toString(t.stackTrace))
+            return null
+        }
+    }
 }

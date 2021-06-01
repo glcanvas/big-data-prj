@@ -8,6 +8,6 @@ class LogTest {
     @Test
     fun logTest() {
         assertEquals(42, Integer.sum(19, 23));
-        logger.info("ANY")
+        println("ANY")
     }
 }

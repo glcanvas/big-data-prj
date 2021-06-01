@@ -15,26 +15,31 @@ import kotlin.collections.ArrayList
 class PathToUrlDeserializer : JsonDeserializer<List<String>> {
 
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): List<String> {
-        val listString = ArrayList<String>()
-        for (i in json!!.asJsonArray) {
-            var item = i.asJsonObject
-            if (item["type"].asString != "photo") {
-                continue
-            }
-            item = item["photo"].asJsonObject
-            val photos = item["sizes"].asJsonArray
-            var maxPixel = Int.MAX_VALUE
-            var maxLink: String? = null
-            for (p in photos) {
-                val photo = p.asJsonObject
-                val sq = photo["height"].asInt * photo["width"].asInt
-                if (sq < maxPixel) {
-                    maxPixel = sq
-                    maxLink = photo["url"].asString
+        try {
+            val listString = ArrayList<String>()
+            for (i in json!!.asJsonArray) {
+                var item = i.asJsonObject
+                if (item["type"].asString != "photo") {
+                    continue
                 }
+                item = item["photo"].asJsonObject
+                val photos = item["sizes"].asJsonArray
+                var maxPixel = Int.MAX_VALUE
+                var maxLink: String? = null
+                for (p in photos) {
+                    val photo = p.asJsonObject
+                    val sq = photo["height"].asInt * photo["width"].asInt
+                    if (sq < maxPixel) {
+                        maxPixel = sq
+                        maxLink = photo["url"].asString
+                    }
+                }
+                listString.add(maxLink!!)
             }
-            listString.add(maxLink!!)
+            return listString
+        } catch (t: Throwable) {
+            println(")")
+            return emptyList()
         }
-        return listString
     }
 }

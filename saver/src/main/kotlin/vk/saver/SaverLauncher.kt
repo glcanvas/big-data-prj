@@ -32,6 +32,7 @@ class SaverLauncher(bootstrap: String, host: String, port: Int) : AbstractApp(bo
             if (mongoPost.date >= wallLastTime[mongoPost.wallId]) {
                 daoClient.put(mongoPost)
                 daoClient.updateMetaPost(mongoPost.wallId, mongoPost.date)
+                wallLastTime[mongoPost.wallId] = mongoPost.date
             }
         }
 
@@ -63,8 +64,8 @@ class SaverLauncher(bootstrap: String, host: String, port: Int) : AbstractApp(bo
         for (meta in daoClient.getCommentMeta()) {
             commentsLastTime[Pair(meta.wallId, meta.postId)] = meta.lastTime
         }
-        log.debug("initialize state: posts=$wallLastTime")
-        log.debug("initialize state: comments=${commentsLastTime.size}")
+        println("initialize state: posts=$wallLastTime")
+        println("initialize state: comments=${commentsLastTime.size}")
     }
 
     override fun appClose() {

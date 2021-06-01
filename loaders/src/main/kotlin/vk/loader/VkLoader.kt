@@ -16,7 +16,7 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
     private val postOffset: Int
 
     init {
-        logger.info("Starts with arguments: apiCaller=$apiCaller, from=$from")
+        println("Starts with arguments: apiCaller=$apiCaller, from=$from")
         postOffset = initializeOffset()
     }
 
@@ -42,7 +42,7 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
             }
         }
         val offset = min(l, count - 1)
-        logger.info("Starts with offset: $offset")
+        println("Starts with offset: $offset")
         return offset
     }
 
@@ -72,11 +72,12 @@ class VkLoader<T : Datable>(private val apiCaller: ApiCaller<T>,
                     offset = 0
                     cnt = Math.abs(offset)
                 }
-                val posts: List<T> = apiCaller.call(offset, cnt).response?.items ?: Collections.emptyList()
-                posts
+                var posts: List<T> = apiCaller.call(offset, cnt).response?.items ?: Collections.emptyList()
+                posts = posts
                         .stream()
                         .filter { it.getDate() > from }
                         .collect(toList())
+                        .reversed()
                 queue.addAll(posts)
             }
             return queue.removeFirst()
