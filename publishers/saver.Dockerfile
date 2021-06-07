@@ -1,6 +1,5 @@
 FROM adoptopenjdk:11-jdk-hotspot
 
-CMD ["gradle"]
 
 ENV GRADLE_HOME /opt/gradle
 
@@ -45,4 +44,11 @@ RUN set -o errexit -o nounset \
     && ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle \
     \
     && echo "Testing Gradle installation" \
-    && gradle --version
+    && gradle --version \
+    && cd /root
+
+RUN git clone https://github.com/glcanvas/big-data-prj.git \
+    && cd /root/big-data-prj \
+    && gradle
+
+# CMD ["gradle"]
