@@ -1,6 +1,6 @@
 rootProject.name = 'big-data-prj'
 
-include 'loaders'
+include 'loader'
 include 'saver'
 include 'kafka-client'
 include 'integration'
