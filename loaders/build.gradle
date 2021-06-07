@@ -1,25 +1,6 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id 'application'
-}
 
-version 'unspecified'
-
-repositories {
-    mavenCentral()
-}
-compileKotlin {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
 
     implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
     implementation 'com.github.kittinunf.fuel:fuel-json:2.3.1'
@@ -36,12 +17,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation project(":kafka-client")
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-
 }
 
-
+/*
 task buildJar(type: Jar) {
     manifest {
         attributes(
@@ -60,3 +38,4 @@ task buildJar(type: Jar) {
             }
     with jar
 }
+ */
