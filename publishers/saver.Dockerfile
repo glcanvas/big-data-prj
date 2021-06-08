@@ -52,3 +52,4 @@ RUN git clone https://github.com/glcanvas/big-data-prj.git \
     && gradle
 
 # CMD ["gradle"]
+# https://api.vk.com/method/groups.getById?v=5.130&access_token=8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a&group_ids=[movies_jpg,pikabu]

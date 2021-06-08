@@ -26,7 +26,7 @@ class SaverLauncher(bootstrap: String, host: String, port: Int) : AbstractApp(bo
             val mongoPost = mapper.map(item)
             if (!wallLastTime.containsKey(mongoPost.wallId)) {
                 wallLastTime[mongoPost.wallId] = mongoPost.date
-                daoClient.put(PostMetaData(item.wallId, "${item.wallId}", mongoPost.date))
+                daoClient.put(PostMetaData(item.wallId, mongoPost.date))
             }
 
             if (mongoPost.date >= wallLastTime[mongoPost.wallId]) {

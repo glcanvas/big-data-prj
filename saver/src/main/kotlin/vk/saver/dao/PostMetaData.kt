@@ -7,8 +7,5 @@ import java.time.Instant
 data class PostMetaData(
         @Id
         var wallId: Int,
-        var name: String,
         var lastTime: Instant
-) {
-    constructor() : this(0, "", Instant.MIN)
-}
+)

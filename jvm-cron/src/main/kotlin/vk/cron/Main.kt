@@ -14,6 +14,10 @@ var kafkaAddress: Argument<String> = stringArgument("--kafka")
         .description("host:port to kafka")
         .build()
 
+var vkKey: Argument<String> = stringArgument("--vk-key")
+        .description("vk key")
+        .build()
+
 var configPath: Argument<String> = stringArgument("--config-path")
         .description("path to config")
         .build()
@@ -31,10 +35,10 @@ fun main(args: Array<String>) {
 
     val argsList: List<String> = MutableList(args.size) { args[it] }
 
-    val arguments: ParsedArguments = CommandLineParser.withArguments(kafkaAddress, configPath, mongoHost, mongoPort)
+    val arguments: ParsedArguments = CommandLineParser.withArguments(kafkaAddress, vkKey, configPath, mongoHost, mongoPort)
             .andArguments(helpArgument)
             .parse(argsList)
-    val launcher = CronLauncher(arguments.get(kafkaAddress)!!, arguments.get(configPath)!!, arguments.get(mongoHost)!!, arguments.get(mongoPort)!!)
+    val launcher = CronLauncher(arguments.get(kafkaAddress)!!, arguments.get(vkKey)!!, arguments.get(configPath)!!, arguments.get(mongoHost)!!, arguments.get(mongoPort)!!)
     val future = launcher.run()
     future.get()
 }

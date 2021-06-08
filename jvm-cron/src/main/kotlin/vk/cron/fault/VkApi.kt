@@ -1,4 +1,4 @@
-package vk.loader.api
+package vk.cron.fault
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -11,15 +11,11 @@ class VkApi : AutoCloseable {
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
-    private val commentsApi: CommentsApi = retrofit.create(CommentsApi::class.java)
-    private val postsApi: PostsApi = retrofit.create(PostsApi::class.java)
+    private val groupsApi: GroupsApi = retrofit.create(GroupsApi::class.java)
 
-    fun commentsApi(): CommentsApi {
-        return commentsApi
-    }
 
-    fun postsApi(): PostsApi {
-        return postsApi
+    fun groupsApi(): GroupsApi {
+        return groupsApi
     }
 
     override fun close() {

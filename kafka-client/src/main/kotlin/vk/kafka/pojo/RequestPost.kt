@@ -7,9 +7,12 @@ import java.time.Instant
 
 data class RequestPost(
         var wallId: Int,
+        var wallNameIdentifier: String,
+        var wallName: String,
         private var lastTime: Instant
 ) : Typable {
-    constructor() : this(0, Instant.MIN)
+    constructor() : this(0, "", "", Instant.MIN)
+
     override fun type(): Typable.Type = Typable.Type.REQUEST_POST
 
     @JsonDeserialize(using = InstantDeserialize::class)

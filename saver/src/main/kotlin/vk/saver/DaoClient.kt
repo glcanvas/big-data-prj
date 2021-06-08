@@ -1,13 +1,10 @@
 package vk.saver
 
 import com.mongodb.MongoClient
-import vk.saver.dao.Comment
-import vk.saver.dao.CommentMetaData
-import vk.saver.dao.Post
-import vk.saver.dao.PostMetaData
 import dev.morphia.Datastore
 import dev.morphia.Key
 import dev.morphia.Morphia
+import vk.saver.dao.*
 import java.time.Instant
 
 class DaoClient(host: String, private val port: Int) : AutoCloseable {
@@ -23,12 +20,6 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
 
     fun <T> put(t: T): Key<T> {
         return datastore.save(t)
-    }
-
-
-    fun putPost(post: List<Post>) {
-
-
     }
 
     fun updateMetaPost(key: Int, updatedLastTime: Instant) {
@@ -79,6 +70,14 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
 
     fun getPostMeta(wallId: Int): List<PostMetaData> {
         return datastore.createQuery(PostMetaData::class.java)
+                .field("wallId")
+                .equal(wallId)
+                .find()
+                .toList()
+    }
+
+    fun getPostLinkage(wallId: Int): List<PostMetaToName> {
+        return datastore.createQuery(PostMetaToName::class.java)
                 .field("wallId")
                 .equal(wallId)
                 .find()

@@ -50,8 +50,8 @@ class DbTest {
     @Test
     fun addGetTest() {
         val client = DaoClient("localhost", port)
-        var p1 = client.put(Post(1, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1,1, Collections.emptyList()))
-        var p2 = client.put(Post(2, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1,1, Collections.emptyList()))
+        var p1 = client.put(Post(1, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1, 1, Collections.emptyList()))
+        var p2 = client.put(Post(2, 1, Instant.parse("2020-01-01T01:01:01.000Z"), "", 1, 1, 1, Collections.emptyList()))
         val posts = client.getPost(1)
         Assertions.assertEquals(2, posts.size)
         client.close()
@@ -60,7 +60,7 @@ class DbTest {
     @Test
     fun addUpdateTest() {
         val client = DaoClient("localhost", port)
-        client.put(PostMetaData(1, "q", Instant.parse("2020-01-01T01:01:01.000Z")))
+        client.put(PostMetaData(1, Instant.parse("2020-01-01T01:01:01.000Z")))
         client.updateMetaPost(1, Instant.parse("2021-01-01T01:01:01.000Z"))
         val meta = client.getPostMeta(1)[0]
         Assertions.assertEquals(Instant.parse("2021-01-01T01:01:01.000Z"), meta.lastTime)
