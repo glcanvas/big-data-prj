@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.function.Supplier
 
-class LoadLauncher(key: String, bootstrap: String) : AbstractApp(bootstrap) {
+class LoadLauncher(bootstrap: String, key: String) : AbstractApp(bootstrap) {
 
     private val vkApi = VkApi()
 
