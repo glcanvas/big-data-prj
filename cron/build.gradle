@@ -14,5 +14,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
-
+    testImplementation "org.testcontainers:testcontainers:1.15.3"
+    testImplementation "org.testcontainers:kafka:1.15.3"
 }

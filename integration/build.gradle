@@ -6,7 +6,7 @@ dependencies {
     implementation project(":kafka-client")
     implementation project(":loader")
     implementation project(":saver")
-    implementation project(":jvm-cron")
+    implementation project(":cron")
 
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
     testImplementation "org.testcontainers:testcontainers:1.15.3"

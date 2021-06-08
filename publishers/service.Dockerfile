@@ -49,5 +49,7 @@ RUN set -o errexit -o nounset \
 
 RUN git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
-    && gradle
+    && gradle \
+    && gradle task_${service_name}_generate \
+    && cd ${service_name}
 
