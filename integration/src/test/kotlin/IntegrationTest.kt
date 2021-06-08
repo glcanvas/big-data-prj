@@ -45,11 +45,10 @@ class IntegrationTest {
         val saverFuture = saver.run()
         val cronFuture = cron.run()
 
-        /*Thread.sleep(TimeUnit.SECONDS.toMillis(10))
+        Thread.sleep(TimeUnit.SECONDS.toMillis(10))
         loader.close()
         saver.close()
         cron.close()
-         */
         loaderFuture.get()
         saverFuture.get()
         cronFuture.get()
