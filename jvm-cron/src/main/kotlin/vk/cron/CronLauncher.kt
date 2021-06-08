@@ -27,7 +27,7 @@ class CronLauncher(bootstrap: String, private val vkKey: String, private val pat
                     println("${key}=${value} invalid")
                     continue
                 }
-                val wallId = response.response[0].groupId
+                val wallId = -response.response[0].groupId
                 val wallNameIdentifier = response.response[0].groupIdentifierName
                 val wallName = response.response[0].groupName
                 val meta = daoClient.getPostMeta(wallId)

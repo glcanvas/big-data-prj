@@ -40,7 +40,10 @@ class Mapper {
     }
 
 
-    private fun loadImages(urls: List<String>): List<ByteArray> {
+    private fun loadImages(urls: List<String>?): List<ByteArray> {
+        if (urls == null) {
+            return listOf()
+        }
         val futureList = ArrayList<Future<ByteArray?>>()
         for (url in urls) {
             val future = loadService.submit(Callable {

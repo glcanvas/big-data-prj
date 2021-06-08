@@ -37,17 +37,19 @@ class IntegrationTest {
     @Test
     fun myTest() {
         val a = kafkaContainer.bootstrapServers
-        val loader = LoadLauncher(key, a)
+        val loader = LoadLauncher(a, key)
         val saver = SaverLauncher(a, "localhost", mongoDb.getPort())
-        val cron = CronLauncher(a, "/Users/nduginets/IdeaProjects/big-data-prj/integration/src/test/resources/properties.properties", "localhost", mongoDb.getPort())
+        val cron = CronLauncher(a, key, "/Users/nduginets/IdeaProjects/big-data-prj/integration/src/test/resources/properties.properties", "localhost", mongoDb.getPort())
 
         val loaderFuture = loader.run()
         val saverFuture = saver.run()
         val cronFuture = cron.run()
-        Thread.sleep(TimeUnit.SECONDS.toMillis(10))
+
+        /*Thread.sleep(TimeUnit.SECONDS.toMillis(10))
         loader.close()
         saver.close()
         cron.close()
+         */
         loaderFuture.get()
         saverFuture.get()
         cronFuture.get()
