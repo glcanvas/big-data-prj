@@ -46,14 +46,13 @@ RUN set -o errexit -o nounset \
     && rm gradle.zip \
     && mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" \
     && ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle \
-    \
     && echo "Testing Gradle installation" \
     && gradle --version \
-    && mkdir /opt/etc
+    && mkdir /opt/etc \
     && mkdir /opt/apps
-    && cd /root
 
-RUN git clone https://github.com/glcanvas/big-data-prj.git \
+RUN cd /root \
+    && git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
     && gradle \
     && gradle createAllJar \
@@ -62,3 +61,4 @@ RUN git clone https://github.com/glcanvas/big-data-prj.git \
     && mv /root/big-data-prj/${CRON}/build/libs/${CRON}-1-all.jar /opt/apps/${CRON}.jar \
     cd /opt/apps
 
+COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh

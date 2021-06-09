@@ -31,6 +31,7 @@ def createExecutableJar(jarName) {
         baseName = jarName
         from {
             configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+            duplicatesStrategy = DuplicatesStrategy.WARN
         }
                 {
                     exclude "META-INF/*.SF"
@@ -38,6 +39,7 @@ def createExecutableJar(jarName) {
                     exclude "META-INF/*.RSA"
                 }
         with jar
+        duplicatesStrategy = DuplicatesStrategy.WARN
     }
 }
 createExecutableJar("cron")
