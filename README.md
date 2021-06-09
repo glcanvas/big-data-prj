@@ -49,7 +49,7 @@ Database has structure bellow:
         * images
             * Comment's attached images (["xxx4543...", "aa453543..."])
             * list of bytes
-    * ** constraints**:
+    * **constraints**:
         * id -- unique
         * commentId, wallId, postId -- unique tuple
 
@@ -85,7 +85,7 @@ Database has structure bellow:
         * images
             * Post's attached images (["xxx4543...", "aa453543..."])
             * list of bytes
-    * ** constraints**:
+    * **constraints**:
         * id -- unique identifier
         * wallId, postId -- unique tuple
 
@@ -103,7 +103,7 @@ Database has structure bellow:
     * lastTime
         * Last processed comment date in pair wallId&postId (ISO formatted, 2020-01-28T05:31:78.000Z)
         * Instant
-    * ** constraints**:
+    * **constraints**:
         * id -- unique identifier
         * wallId, postId -- unique tuple
 
@@ -114,7 +114,7 @@ Database has structure bellow:
     * lastTime
         * Last processed comment date in pair wallId&postId (ISO formatted, 2020-01-28T05:31:78.000Z)
         * Instant
-    * ** constraints**:
+    * **constraints**:
         * wallId -- unique identifier
 
 * PostMetaToName -- table with wall name and wall title
@@ -127,7 +127,7 @@ Database has structure bellow:
     * wallTitle
         * Wall title
         * string
-    * ** constraints**:
+    * **constraints**:
         * wallId -- unique identifier
     
 
