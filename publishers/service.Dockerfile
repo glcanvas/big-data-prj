@@ -63,6 +63,7 @@ RUN mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAV
     && cd /opt/apps
 
 COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh
+COPY groups.properties /var/data/groups.properties
 
 RUN chmod u+x /opt/apps/microservice-launcher.sh
 RUN mkdir /var/data

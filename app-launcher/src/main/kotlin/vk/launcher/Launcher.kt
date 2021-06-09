@@ -4,7 +4,7 @@ import vk.launcher.Launcher.Companion.load
 
 const val KEY = "VK_KEY"
 const val KAFKA_ADDRESS = "KAFKA_ADDRESS"
-const val CONFIG_PATH = "CONFIG_PATH"
+const val HTTP_PORT = "HTTP_PORT"
 const val MONGO_HOST = "MONGO_HOST"
 const val MONGO_PORT = "MONGO_PORT"
 
@@ -28,8 +28,8 @@ class Launcher private constructor(val envMap: Map<String, String>) {
         return envMap[KAFKA_ADDRESS]!!
     }
 
-    fun getConfigPath(): String {
-        return envMap[CONFIG_PATH]!!
+    fun getHttpPort(): Int {
+        return Integer.parseInt(envMap[HTTP_PORT]!!)
     }
 
     fun getMongoHost(): String {

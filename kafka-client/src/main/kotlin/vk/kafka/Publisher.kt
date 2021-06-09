@@ -3,14 +3,13 @@ package vk.kafka
 import com.google.common.collect.ImmutableMap
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
-import org.apache.log4j.Logger
 import vk.kafka.pojo.ObjectHolder
 import vk.kafka.utils.ObjectHolderProcessor
 
 class Publisher(bootstrapServer: String, private val topic: String) : AutoCloseable{
-    private val log: Logger = Logger.getLogger(Publisher::class.java)
     private val producer = KafkaProducer(ImmutableMap.of<String?, Any?>(
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
             bootstrapServer),
@@ -31,3 +30,21 @@ class Publisher(bootstrapServer: String, private val topic: String) : AutoClosea
         producer.close()
     }
 }
+
+/*
+fun main() {
+    var prod = KafkaProducer(ImmutableMap.of<String?, Any?>(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "localhost:9092",
+    ),
+
+            StringSerializer(),
+            StringSerializer()) // KAFKA_ADVERTISED_LISTENERS
+
+    var fut = prod.send(ProducerRecord("sosalovo", "kek", "mek"))
+    val res = fut.get()
+    println(res)
+
+}
+
+ */

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.log4j.Logger
 import vk.kafka.utils.ObjectHolderProcessor
 import vk.kafka.utils.OnTypeElement
 import java.io.Closeable
@@ -12,7 +11,6 @@ import java.time.Duration
 import java.util.*
 
 class Consumer(bootstrapServer: String, topic: String): AutoCloseable {
-    private val log: Logger = Logger.getLogger(Consumer::class.java)
     private val consumer = KafkaConsumer(
             ImmutableMap.of<String, Any>(
                     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,

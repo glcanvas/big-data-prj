@@ -1,6 +1,5 @@
 package vk.kafka.app
 
-import org.apache.log4j.Logger
 import vk.kafka.Consumer
 import vk.kafka.Publisher
 import vk.kafka.pojo.*
@@ -11,7 +10,6 @@ import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractApp(kafkaBootstrap: String) : AutoCloseable {
-    protected val log: Logger = Logger.getLogger(AbstractApp::class.java)
 
     companion object {
         private const val topic = "t1"

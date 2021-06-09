@@ -1,7 +1,7 @@
-version: "3.8"
+version: '2'
 services:
   mongodb:
-    image : mongo
+    image: mongo
     container_name: mongodb
     environment:
       - PUID=1000
@@ -12,17 +12,38 @@ services:
       - 27017:27017
     restart: unless-stopped
 
-  cron:
-    image: app:1
-    container_name: app_cron
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
     environment:
-      - APP_NAME=cron
-      - VK_KEY=8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a
-      - KAFKA_ADDRESS="TODO address"
-      - CONFIG_PATH=/var/data/groups.properties
-      - MONGO_HOST=localhost
-      - MONGO_PORT=27017
-      - AAAAAA=2342
+      DOCKER_API_VERSION: 1.22
+      KAFKA_CREATE_TOPICS: "t1:1:1"
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
-      - ./:/var/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  loader:
+    image: app:1
+    container_name: app_loader
+    environment:
+      APP_NAME: loader
+      VK_KEY: 8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a
+      KAFKA_ADDRESS: 0.0.0.0:9092
     restart: unless-stopped
+
+  #saver:
+  #  image: app:1
+  #  container_name: app_saver
+  #  environment:
+  #    - APP_NAME=saver
+  #    - KAFKA_ADDRESS=localhost:9092
+  #    - MONGO_HOST=localhost
+  #    - MONGO_PORT=27017
+  #  restart: unless-stopped
