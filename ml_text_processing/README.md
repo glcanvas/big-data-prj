@@ -7,7 +7,9 @@ We are using Tesseract -- Open-Source OCR model, detecting russian and english l
 ### Usage:
 1. Install using `tesseract_installation.sh`;
 2. Having image `path/to/image_01.jpg`, launch `tesseract path/to/image_01.jpg path/to/image_01 -l eng`;
-3. Get extracted text from `path/to/image_01.txt` file.
+3. Get extracted text from `path/to/image_01.txt` file.  
+
+OR you can use Python wrapper `pytesseract` that can be installed with `requirements.txt`.
 
 ## Toxicity analyzer
 We trained classifier to identify toxicity, based on the dataset given in [this competition](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge), there is a large number of Wikipedia comments which have been labeled by human raters for toxic behavior. The pipeline was the following: apply TF-IDF Vectorizer and Logistic Regression model after it. The obtaine ROC AUC score on 5-fold CV is `0.9587`, you can check the implementation details in `train.py` file.

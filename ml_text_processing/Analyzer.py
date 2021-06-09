@@ -1,9 +1,12 @@
+import io
 import pickle
 import subprocess
 from os import listdir, remove
 from os.path import isfile, join, splitext
 
 import pandas as pd
+import pytesseract
+from PIL import Image
 
 
 def execute_command(command) -> None:
@@ -29,16 +32,15 @@ class Analyzer:
         prediction = self.regressor.predict_proba(text_transformed)[:, 1][0]
         return prediction
 
-    def predict_image_toxicity(self, image_path):
-        assert isfile(image_path), f'Can\'t find image at {image_path}'
-        text_path = splitext(image_path)[0]
-        execute_command(f'tesseract {image_path} {text_path} -l eng')
+    def predict_image_toxicity(self, image_path, image_data):
+        assert image_path is not None or image_data is not None, 'At least one argument should not be `None`'
         try:
-            text_path = f'{text_path}.txt'
-            with open(text_path, 'r') as f:
-                text = f.read()
-            remove(text_path)
-            return text, self.predict_text_toxicity(text)
+            if image_path is not None:
+                image = Image.open(image_path) 
+            else:
+                image = Image.open(io.BytesIO(image_data))
+            recognized_text = pytesseract.image_to_string(image, lang='eng')
+            return recognized_text, self.predict_text_toxicity(recognized_text)
         except:
             return '', 0
 
@@ -61,6 +63,15 @@ if __name__ == "__main__":
     images_path = join('ml_text_processing', 'data', 'images')
     images_paths = [el for el in listdir(images_path) if splitext(el)[1] != '.txt']
     images_paths.sort()
+
+    # Example with path to image
     for image_path in images_paths:
-        prediction = analyzer.predict_image_toxicity(join(images_path, image_path))
+        prediction = analyzer.predict_image_toxicity(join(images_path, image_path), None)
+        print(f'Text extracted from {image_path} is ```\n{prediction[0].strip()}\n```\nIt\'s toxicity is {round(prediction[1]*100)}%')
+
+    # Example with raw image bytes
+    for image_path in images_paths:
+        with open(join(images_path, image_path), 'rb') as f:
+            image_data = f.read()
+        prediction = analyzer.predict_image_toxicity(None, image_data)
         print(f'Text extracted from {image_path} is ```\n{prediction[0].strip()}\n```\nIt\'s toxicity is {round(prediction[1]*100)}%')
