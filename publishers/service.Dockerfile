@@ -3,6 +3,10 @@ FROM adoptopenjdk:11-jdk-hotspot
 
 ENV GRADLE_HOME /opt/gradle
 
+ENV SAVER saver
+ENV LOADER loader
+ENV CRON cron
+
 RUN set -o errexit -o nounset \
     && echo "Adding gradle user and group" \
     && groupadd --system --gid 1000 gradle \
@@ -45,13 +49,16 @@ RUN set -o errexit -o nounset \
     \
     && echo "Testing Gradle installation" \
     && gradle --version \
+    && mkdir /opt/etc
+    && mkdir /opt/apps
     && cd /root
 
 RUN git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
     && gradle \
-    && gradle task_${service_name}_generate \
-    && cd ${service_name}/build/libs \
-    && mv ./${service_name}-1.jar /root/app.jar \
-    cd /root
+    && gradle createAllJar \
+    && mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAVER}.jar \
+    && mv /root/big-data-prj/${LOADER}/build/libs/${LOADER}-1-all.jar /opt/apps/${LOADER}.jar \
+    && mv /root/big-data-prj/${CRON}/build/libs/${CRON}-1-all.jar /opt/apps/${CRON}.jar \
+    cd /opt/apps
 

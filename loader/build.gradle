@@ -18,3 +18,26 @@ dependencies {
     implementation project(":app-launcher")
 
 }
+
+def createExecutableJar(jarName) {
+    tasks.create("task_${jarName}_generate", Jar) {
+        dependsOn('build')
+        manifest {
+            attributes(
+                    'Main-Class': "vk.${jarName}.Main"
+            )
+        }
+        classifier = 'all'
+        baseName = jarName
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+                {
+                    exclude "META-INF/*.SF"
+                    exclude "META-INF/*.DSA"
+                    exclude "META-INF/*.RSA"
+                }
+        with jar
+    }
+}
+createExecutableJar("loader")

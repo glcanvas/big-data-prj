@@ -1,4 +1,11 @@
-import java.util.HashMap
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin'
+    }
+}
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
@@ -46,29 +53,10 @@ subprojects {
     }
 }
 
-def createExecutableJar(jarName) {
-    tasks.create("task_${jarName}_generate", Jar) {
-        dependsOn(jarName + ':build')
-        manifest {
-            attributes(
-                    'Main-Class': 'vk.${jarName}.Main'
-            )
-        }
-        classifier = 'all'
-        baseName = jarName
-        from {
-            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-        }
-                {
-                    exclude "META-INF/*.SF"
-                    exclude "META-INF/*.DSA"
-                    exclude "META-INF/*.RSA"
-                }
-        with jar
-    }
+tasks.create("createAllJar") {
+    dependsOn("cron:task_cron_generate", "loader:task_loader_generate", "saver:task_saver_generate")
 }
 
-createExecutableJar("saver")
-createExecutableJar("loader")
-createExecutableJar("cron")
+
+
 
