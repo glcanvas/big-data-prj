@@ -38,6 +38,7 @@ def createExecutableJar(jarName) {
                     exclude "META-INF/*.RSA"
                 }
         with jar
+        duplicatesStrategy = DuplicatesStrategy.WARN
     }
 }
 createExecutableJar("loader")
