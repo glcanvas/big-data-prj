@@ -1,3 +1,4 @@
+# You can download train and test files at https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data
 import os
 import pickle
 from os.path import dirname
