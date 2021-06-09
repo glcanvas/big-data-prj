@@ -7,6 +7,7 @@ import java.util.*
 class Mapper {
     fun map(post: vk.kafka.pojo.Post): Post {
         val res = Post()
+        res.id = UUID.randomUUID().toString()
         res.postId = post.postId
         res.wallId = post.wallId
         res.date = post.getDate()

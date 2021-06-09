@@ -9,3 +9,6 @@ data class PostMetaData(
         var wallId: Int,
         var lastTime: Instant
 )
+{
+        constructor() : this(0, Instant.MIN)
+}

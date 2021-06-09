@@ -52,8 +52,38 @@ Database has structure bellow:
     * ** constraints**:
         * id -- unique
         * commentId, wallId, postId -- unique tuple
-    
+
 * Post
+    * **with fields**:
+      * id
+      * Unique identifier
+      * string
+
+          * postId
+            * Wall's post identifier
+            * integer
+        * wallId
+            * Wall's identifier (for example -45989129)
+            * integer
+        * authorId
+            * Comment's author
+            * integer
+        * date
+            * Comment's date (ISO formatted, 2020-01-28T05:31:78.000Z)
+            * Instant
+        * text
+            * Comment's text
+            * string
+        * likes
+            * Comment's likes
+            * integer
+        * images
+            * Comment's attached images (["xxx4543...", "aa453543..."])
+            * list of bytes
+    * ** constraints**:
+        * wallId, postId -- unique tuple
+
+
 * CommentMetaData
 * PostMetaData
 * PostMetaToName

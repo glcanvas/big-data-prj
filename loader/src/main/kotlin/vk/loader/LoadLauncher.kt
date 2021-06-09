@@ -36,8 +36,11 @@ class LoadLauncher(bootstrap: String, key: String) : AbstractApp(bootstrap) {
             var cnt = 0
             for (p in loader) {
                 cnt++
-                sendQueue.add(errorFreeSupplier(p) { mapper.map(p) })
-                if(cnt > 500) {
+                val res = errorFreeSupplier(p) { mapper.map(p, item.wallId) }
+                if (res != null) {
+                    sendQueue.add(res)
+                }
+                if (cnt > 500) {
                     break
                 }
             }
@@ -53,8 +56,11 @@ class LoadLauncher(bootstrap: String, key: String) : AbstractApp(bootstrap) {
             var cnt = 0
             for (c in loader) {
                 cnt++
-                sendQueue.add(errorFreeSupplier(c) {mapper.map(c, item.postId, item.wallId)})
-                if(cnt > 100) {
+                val res = errorFreeSupplier(c) { mapper.map(c, item.postId, item.wallId) }
+                if (res != null) {
+                    sendQueue.add(res)
+                }
+                if (cnt > 100) {
                     break
                 }
             }

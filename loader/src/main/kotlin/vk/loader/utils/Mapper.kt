@@ -12,10 +12,10 @@ class Mapper {
 
     private val loadService: ExecutorService = Executors.newFixedThreadPool(10)
 
-    fun map(post: vk.loader.dao.Post): vk.kafka.pojo.Post {
+    fun map(post: vk.loader.dao.Post, wallId: Int): vk.kafka.pojo.Post {
         val res = vk.kafka.pojo.Post()
         res.postId = post.postId
-        res.wallId = post.wallId
+        res.wallId = wallId
         res.setDate(post.getDate())
         res.text = post.text
         res.likes = post.likes

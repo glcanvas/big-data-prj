@@ -1,5 +1,6 @@
 import com.mongodb.MongoClient
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.testcontainers.containers.KafkaContainer
@@ -10,6 +11,7 @@ import vk.kafka.Publisher
 import vk.kafka.pojo.ObjectHolder
 import vk.kafka.pojo.RequestPost
 import vk.loader.LoadLauncher
+import vk.saver.DaoClient
 import vk.saver.SaverLauncher
 import vk.saver.dao.PostMetaData
 import java.time.Instant
@@ -52,5 +54,10 @@ class IntegrationTest {
         loaderFuture.get()
         saverFuture.get()
         cronFuture.get()
+
+        val client = DaoClient("localhost", mongoDb.getPort())
+        Assertions.assertEquals(2, client.getPostMeta().size)
+
+        client.close()
     }
 }
