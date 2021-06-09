@@ -51,5 +51,7 @@ RUN git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
     && gradle \
     && gradle task_${service_name}_generate \
-    && cd ${service_name}
+    && cd ${service_name}/build/libs \
+    && mv ./${service_name}-1.jar /root/app.jar \
+    cd /root
 
