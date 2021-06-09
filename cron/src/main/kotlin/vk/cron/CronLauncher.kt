@@ -59,7 +59,7 @@ class CronLauncher(bootstrap: String, private val vkKey: String, private val htt
     }
 
     override fun initialize() {
-        /*
+
         httpServer = embeddedServer(Netty, httpPort) {
             routing {
                 get("/") {
@@ -75,8 +75,6 @@ class CronLauncher(bootstrap: String, private val vkKey: String, private val htt
                 }
             }
         }.start()
-
-         */
     }
 
     override fun appClose() {
