@@ -15,5 +15,5 @@ git clone https://github.com/zdenop/tessdata_downloader.git
 cd tessdata_downloader
 pip3 install -r requirements.txt
 sudo python3 tessdata_downloader.py -o /usr/local/share/tessdata/ -r tessdata_fast -l eng
-sudo python3 tessdata_downloader.py -o /usr/local/share/tessdata/ -r tessdata_fast -l rus
+# sudo python3 tessdata_downloader.py -o /usr/local/share/tessdata/ -r tessdata_fast -l rus 
 
