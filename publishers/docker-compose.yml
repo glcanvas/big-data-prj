@@ -7,7 +7,22 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /opt/mongodb/database:/data/db
+      - /Users/nduginets/mongodb:/data/db
     ports:
       - 27017:27017
+    restart: unless-stopped
+
+  cron:
+    image: app:1
+    container_name: app_cron
+    environment:
+      - APP_NAME=cron
+      - VK_KEY=8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a
+      - KAFKA_ADDRESS="TODO address"
+      - CONFIG_PATH=/var/data/groups.properties
+      - MONGO_HOST=localhost
+      - MONGO_PORT=27017
+      - AAAAAA=2342
+    volumes:
+      - ./:/var/data
     restart: unless-stopped

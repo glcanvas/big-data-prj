@@ -55,10 +55,16 @@ RUN cd /root \
     && git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
     && gradle \
-    && gradle createAllJar \
-    && mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAVER}.jar \
+    && gradle createAllJar
+
+RUN mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAVER}.jar \
     && mv /root/big-data-prj/${LOADER}/build/libs/${LOADER}-1-all.jar /opt/apps/${LOADER}.jar \
     && mv /root/big-data-prj/${CRON}/build/libs/${CRON}-1-all.jar /opt/apps/${CRON}.jar \
-    cd /opt/apps
+    && cd /opt/apps
 
 COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh
+
+RUN chmod u+x /opt/apps/microservice-launcher.sh
+RUN mkdir /var/data
+
+CMD ["sh", "-c", "/opt/apps/microservice-launcher.sh"]
