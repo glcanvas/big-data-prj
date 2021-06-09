@@ -31,3 +31,13 @@ class Publisher(bootstrapServer: String, private val topic: String) : AutoClosea
         producer.close()
     }
 }
+
+fun main() {
+    var prod = KafkaProducer(ImmutableMap.of<String?, Any?>(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "bootstrapServer"),
+            StringSerializer(),
+            StringSerializer())
+
+
+}

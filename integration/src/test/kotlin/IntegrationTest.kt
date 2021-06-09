@@ -41,7 +41,7 @@ class IntegrationTest {
         val a = kafkaContainer.bootstrapServers
         val loader = LoadLauncher(a, key)
         val saver = SaverLauncher(a, "localhost", mongoDb.getPort())
-        val cron = CronLauncher(a, key, "/Users/nduginets/IdeaProjects/big-data-prj/integration/src/test/resources/properties.properties", "localhost", mongoDb.getPort())
+        val cron = CronLauncher(a, key, 8080, "localhost", mongoDb.getPort())
 
         val loaderFuture = loader.run()
         val saverFuture = saver.run()
