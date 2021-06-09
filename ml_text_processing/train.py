@@ -70,7 +70,7 @@ def test_model(texts, vectorizer_path, regressor_path):
     prediction = regressor.predict_proba(texts_transformed)[:, 1]
 
     for i, text in enumerate(texts):
-        print(f'Text "{text}" is {round(prediction[i]*100)}% toxic.')
+        print(f'Text ```{text}``` is {round(prediction[i]*100)}% toxic.')
 
 
 if __name__ == "__main__":
