@@ -17,7 +17,7 @@ class ObjectHolderProcessor : Deserializer<ObjectHolder>, Serializer<ObjectHolde
 
     init {
         mapper.registerModule(JavaTimeModule())
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
     }
 
     override fun deserialize(topic: String?, data: ByteArray?): ObjectHolder {

@@ -47,7 +47,7 @@ class KafkaTest {
 
     @Test
     fun simpleTest() {
-        val a = kafkaContainer.getBootstrapServers()
+        val a = kafkaContainer.bootstrapServers
         println(a)
 
         val producer = getProducer(kafkaContainer)

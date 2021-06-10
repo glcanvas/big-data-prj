@@ -13,8 +13,8 @@ abstract class AbstractApp(kafkaBootstrap: String) : AutoCloseable {
 
     companion object {
         private const val topic = "t1"
-        public const val timeout_millis = 100L
-        public val time_out = TimeUnit.MILLISECONDS
+        const val timeout_millis = 100L
+        val time_out = TimeUnit.MILLISECONDS
     }
 
     private val publisher = Publisher(kafkaBootstrap, topic)

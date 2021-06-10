@@ -7,9 +7,9 @@ import java.time.Instant
 fun main() {
     val array = ByteArray(228)
     array[0] = 1
-    val p = Post(1, 1, Instant.MIN, "dsd", 0, 0, 0, listOf(ByteArray(123)))
+    val p = Post(1, 1, Instant.MIN, "dsd", 0, 0, 0, listOf())
     val jo = JSONObject()
-    jo.put("DD", JSONObject(p));
+    jo.put("DD", JSONObject(p))
 
     println(jo)
 }

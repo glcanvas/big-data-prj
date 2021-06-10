@@ -2,7 +2,8 @@ package vk.loader.utils
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
-import java.util.ArrayList
+import java.io.FileOutputStream
+import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -12,7 +13,7 @@ class Mapper {
 
     private val loadService: ExecutorService = Executors.newFixedThreadPool(10)
 
-    fun map(post: vk.loader.dao.Post, wallId: Int): vk.kafka.pojo.Post {
+    fun map(post: vk.loader.dao.Post, wallId: Int, imgPath: String): vk.kafka.pojo.Post {
         val res = vk.kafka.pojo.Post()
         res.postId = post.postId
         res.wallId = wallId
@@ -21,7 +22,7 @@ class Mapper {
         res.likes = post.likes
         res.reposts = post.reposts
         res.views = post.views
-        res.images = loadImages(post.images)
+        res.images = loadImages(post.images, imgPath)
         return res
     }
 
@@ -34,13 +35,13 @@ class Mapper {
         res.setDate(comment.getDate())
         res.text = comment.text
         res.likes = comment.likes
-        res.images = loadImages(comment.images)
+        res.images = Collections.emptyList() // loadImages(comment.images)
         return res
 
     }
 
 
-    private fun loadImages(urls: List<String>?): List<ByteArray> {
+    private fun loadImages(urls: List<String>?, imgPath: String): List<String> {
         if (urls == null) {
             return listOf()
         }
@@ -57,11 +58,19 @@ class Mapper {
             futureList.add(future)
         }
 
-        val resList = ArrayList<ByteArray>()
+        val resList = ArrayList<String>()
         for (f in futureList) {
             val res = f.get()
             if (res != null) {
-                resList.add(res)
+                try {
+                    val name = UUID.randomUUID().toString() + ".jpg"
+                    FileOutputStream("$imgPath/$name").use {
+                        it.write(res)
+                    }
+                    resList.add(name)
+                } catch (t: Throwable) {
+                    t.printStackTrace()
+                }
             }
         }
         return resList

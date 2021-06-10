@@ -8,7 +8,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import java.lang.reflect.Type
 
-class IntToSexDeserializer(): TypeAdapter<String>() {
+class IntToSexDeserializer : TypeAdapter<String>() {
     override fun write(out: JsonWriter?, value: String?) {
         throw IllegalStateException("unexpected state write")
     }
