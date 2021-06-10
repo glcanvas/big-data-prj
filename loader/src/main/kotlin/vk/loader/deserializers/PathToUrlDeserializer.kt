@@ -24,17 +24,24 @@ class PathToUrlDeserializer : JsonDeserializer<List<String>> {
                 }
                 item = item["photo"].asJsonObject
                 val photos = item["sizes"].asJsonArray
-                var maxPixel = Int.MAX_VALUE
-                var maxLink: String? = null
+
+                val photoItems: MutableList<Pair<Int, String>> = ArrayList()
                 for (p in photos) {
                     val photo = p.asJsonObject
                     val sq = photo["height"].asInt * photo["width"].asInt
-                    if (sq < maxPixel) {
-                        maxPixel = sq
-                        maxLink = photo["url"].asString
-                    }
+                    val maxPixel = sq
+                    val maxLink = photo["url"].asString
+                    photoItems.add(Pair(maxPixel, maxLink))
                 }
-                listString.add(maxLink!!)
+                photoItems.sortWith(Comparator.comparingInt { it.first })
+                val imgIdx = if (photoItems.size - 4 < 0) {
+                    photoItems.size - 1
+                } else {
+                    photoItems.size - 4
+                }
+                if (photoItems.isNotEmpty()) {
+                    listString.add(photoItems[imgIdx].second)
+                }
             }
             return listString
         } catch (t: Throwable) {
