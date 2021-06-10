@@ -8,6 +8,7 @@ import vk.kafka.utils.Typable
 import vk.saver.dao.CommentMetaData
 import vk.saver.dao.PostMetaData
 import vk.saver.utils.Mapper
+import java.lang.Exception
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.BlockingQueue
@@ -57,15 +58,29 @@ class SaverLauncher(bootstrap: String, host: String, port: Int) : AbstractApp(bo
     }
 
     override fun initialize() {
-        for (meta in daoClient.getPostMeta()) {
-            wallLastTime[meta.wallId] = meta.lastTime
+        while(true) {
+            try {
+                for (meta in daoClient.getPostMeta()) {
+                    wallLastTime[meta.wallId] = meta.lastTime
+                }
+
+                for (meta in daoClient.getCommentMeta()) {
+                    commentsLastTime[Pair(meta.wallId, meta.postId)] = meta.lastTime
+                }
+                println("initialize state: posts=$wallLastTime")
+                println("initialize state: comments=${commentsLastTime.size}")
+                break
+            } catch (i: InterruptedException) {
+                println("interrupted, while initialize state break")
+                Thread.currentThread().interrupt()
+                break
+            }   catch (e: Exception) {
+                println("Exception while initialize")
+                println(e)
+                e.printStackTrace()
+            }
         }
 
-        for (meta in daoClient.getCommentMeta()) {
-            commentsLastTime[Pair(meta.wallId, meta.postId)] = meta.lastTime
-        }
-        println("initialize state: posts=$wallLastTime")
-        println("initialize state: comments=${commentsLastTime.size}")
     }
 
     override fun appClose() {
