@@ -51,11 +51,21 @@ RUN set -o errexit -o nounset \
     && mkdir /opt/etc \
     && mkdir /opt/apps
 
+RUN rm -rf /opt/apps \
+    && rm -rf /root/big-data-prj \
+    && pwd \
+    && ls -al /opt \
+    && echo "===============" \
+    && ls -al /root
+
+
 RUN cd /root \
     && git clone https://github.com/glcanvas/big-data-prj.git \
     && cd /root/big-data-prj \
     && gradle \
     && gradle createAllJar
+
+RUN mkdir /opt/apps
 
 RUN mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAVER}.jar \
     && mv /root/big-data-prj/${LOADER}/build/libs/${LOADER}-1-all.jar /opt/apps/${LOADER}.jar \
@@ -63,7 +73,6 @@ RUN mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAV
     && cd /opt/apps
 
 COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh
-COPY groups.properties /var/data/groups.properties
 
 RUN chmod u+x /opt/apps/microservice-launcher.sh
 
