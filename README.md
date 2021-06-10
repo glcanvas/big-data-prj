@@ -1,20 +1,81 @@
 ## Real-time VK posts toxicity analyzer
 
-Our distributed implementation of Vk posts analyzer
+Distributed implementation of VK posts analyzer.
 
-TODO add informative description
+### Developed by
 
-### Tech details
+* Nikita Duginets  
+* Nikita Detkov  
+* Nikita Mramorov  
+* Rami Al-Naim  
 
-Under this section will be presented implementation details
+### Description
 
-For load data from the VK we used [VK-API](https://vk.com/dev/methods)
+This program represents streaming pipeline which consists of the following steps:
 
-#### database and it's schema
+1) Collects data from VK posts of given groups.
+2) Writes data to MongoDB and Kafka.
+3) Receives data from Kafka and streams it into Spark.
+4) Splits data in two parts:
+    * Text data
+    * Image data
+5) Measures toxicity level of each data peace.
+6) Writes results to MongoDB.
 
-For storage loaded data we used MongoDB.
+### Building
 
-Database has structure bellow:
+In order to build project, follow the instruction below:
+
+1) Run ``cd publishers/``
+2) Set execution permission ``chmod +x build_and_start.sh``
+3) Run ``./build_and_start.sh``. If everything works fine, you will see parser logs.
+4) Open another terminal window and run ``docker-compose ps`` to check if all services have **Up** state.
+5) Add VK group using command ``curl http://localhost:8080/add?add=<group_name>``
+6) Check parser logs, you will see that amount of fetched messages increased.
+7) Go to ``http://localhost:8889`` to open Jupyter Notebook. If token is required, check
+*Spark* logs using ``docker logs --tail 20 <spark_container_name>`` command and copy token.
+8) Upload notebooks from **notebooks/** directory.
+9) Run notebook **kafka_router.ipynb**, it it will run continuously.
+10) Copy commands from **tesseract_installation.sh** file from **ml_text_processing** directory.
+11) Run in terminal command ``docker exec -it <spark_container_name> bash``. You will
+access container console.
+12) Run copied Tesseract installation commands. **WARNING!** This step involves high memory load.
+13) Run command ``pip install pymongo``.
+14) Run both notebooks **text_consumer.ipynb** and **image_consumer.ipynb** in order
+to analyse data.
+ 
+### Implementation details
+
+#### Deployment
+
+Deployment is done by *docker-compose* utility.
+
+#### API
+
+For data loading [VK-API](https://vk.com/dev/methods) was used.
+
+#### Parser
+
+**Kotlin** is used in order to implement **Loader**, **Cron**, **Saver** modules.
+
+#### Kafka
+
+*Kafka* is build from corresponding Docker image. For interaction with *Kafka* the Python
+package *kafka-python* is used.
+
+#### Spark
+
+*Spark* is build from corresponding Docker image. For interaction with *Spark* the *pyspark*
+Python package is used.
+
+#### MongoDB
+
+Standard *MongoDB* Docker image was used.
+
+
+#### Database schema
+
+Database structure is shown below:
 
 **name**: "vk"
 
