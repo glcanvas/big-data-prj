@@ -13,11 +13,12 @@ services:
       - 27017:27017
     restart: unless-stopped
   spark:
-    image: jupyter/pyspark-notebook
+    image: raminaim/ml_project_spark
     ports:
       - "8889:8888"
     volumes:
       - /home/rami/Desktop/docs/pyspark_vol:/home/jovyan/work:rw
+      - ./mongo-storage/images:/home/jovyan/images
     user: root
     environment:
       GRANT_SUDO: 1
@@ -60,7 +61,10 @@ services:
   loader:
     image: app:2
     container_name: loader
+    volumes:
+      - ./mongo-storage/images:/var/data
     environment:
+      IMAGE_DIR: /var/data
       APP_NAME: loader
       VK_KEY: 8b34623d8b34623d8b34623d128b595d3788b348b34623deb51e7e4149c9e0837beb45a
       KAFKA_ADDRESS: kafka:9092
@@ -92,3 +96,4 @@ services:
       - MONGO_HOST=mongo
       - MONGO_PORT=27017
     restart: unless-stopped
+
