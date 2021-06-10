@@ -30,21 +30,3 @@ class Publisher(bootstrapServer: String, private val topic: String) : AutoClosea
         producer.close()
     }
 }
-
-/*
-fun main() {
-    var prod = KafkaProducer(ImmutableMap.of<String?, Any?>(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-            "localhost:9092",
-    ),
-
-            StringSerializer(),
-            StringSerializer()) // KAFKA_ADVERTISED_LISTENERS
-
-    var fut = prod.send(ProducerRecord("sosalovo", "kek", "mek"))
-    val res = fut.get()
-    println(res)
-
-}
-
- */
