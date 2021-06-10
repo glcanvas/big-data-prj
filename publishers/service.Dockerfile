@@ -66,6 +66,5 @@ COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh
 COPY groups.properties /var/data/groups.properties
 
 RUN chmod u+x /opt/apps/microservice-launcher.sh
-RUN mkdir /var/data
 
 CMD ["sh", "-c", "/opt/apps/microservice-launcher.sh"]
