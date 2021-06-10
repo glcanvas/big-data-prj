@@ -58,6 +58,8 @@ RUN rm -rf /opt/apps \
     && echo "===============" \
     && ls -al /root
 
+RUN rm -rf /var/data
+RUN mkdir /var/data
 
 RUN cd /root \
     && git clone https://github.com/glcanvas/big-data-prj.git \

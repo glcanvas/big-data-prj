@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.function.Supplier
 
-class LoadLauncher(bootstrap: String, key: String) : AbstractApp(bootstrap) {
+class LoadLauncher(bootstrap: String, key: String, imgPath: String) : AbstractApp(bootstrap) {
 
     private val vkApi = VkApi()
 
@@ -36,7 +36,7 @@ class LoadLauncher(bootstrap: String, key: String) : AbstractApp(bootstrap) {
             var cnt = 0
             for (p in loader) {
                 cnt++
-                val res = errorFreeSupplier(p) { mapper.map(p, item.wallId) }
+                val res = errorFreeSupplier(p) { mapper.map(p, item.wallId, imgPath) }
                 if (res != null) {
                     sendQueue.add(res)
                 }

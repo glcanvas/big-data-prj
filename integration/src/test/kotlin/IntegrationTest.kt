@@ -39,7 +39,7 @@ class IntegrationTest {
     @Test
     fun myTest() {
         val a = kafkaContainer.bootstrapServers
-        val loader = LoadLauncher(a, key)
+        val loader = LoadLauncher(a, key, "/Users/nduginets/IdeaProjects/big-data-prj/images")
         val saver = SaverLauncher(a, "localhost", mongoDb.getPort())
         val cron = CronLauncher(a, key, 8080, "localhost", mongoDb.getPort())
 

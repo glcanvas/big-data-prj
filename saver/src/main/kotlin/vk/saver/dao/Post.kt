@@ -17,7 +17,7 @@ data class Post(
         var likes: Int,
         var reposts: Int,
         var views: Int,
-        var images: List<ByteArray>
+        var images: List<String>
 ) {
     constructor() : this("", 0, 0, Instant.MIN, "", 0, 0, 0, Collections.emptyList())
 }

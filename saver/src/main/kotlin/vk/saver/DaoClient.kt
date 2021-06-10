@@ -25,10 +25,10 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
     fun updateMetaPost(key: Int, updatedLastTime: Instant) {
         val query = datastore.createQuery(PostMetaData::class.java)
                 .field("wallId")
-                .equal(key);
+                .equal(key)
         val update = datastore.createUpdateOperations(PostMetaData::class.java)
-                .set("lastTime", updatedLastTime);
-        datastore.update(query, update);
+                .set("lastTime", updatedLastTime)
+        datastore.update(query, update)
     }
 
     fun updateMetaComment(wallId: Int, postId: Int, updatedLastTime: Instant) {
@@ -36,10 +36,10 @@ class DaoClient(host: String, private val port: Int) : AutoCloseable {
                 .field("wallId")
                 .equal(wallId)
                 .field("postId")
-                .equal(postId);
+                .equal(postId)
         val update = datastore.createUpdateOperations(CommentMetaData::class.java)
-                .set("lastTime", updatedLastTime);
-        datastore.update(query, update);
+                .set("lastTime", updatedLastTime)
+        datastore.update(query, update)
     }
 
     fun getPost(wallId: Int): List<Post> {

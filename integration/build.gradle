@@ -11,5 +11,6 @@ dependencies {
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
     testImplementation "org.testcontainers:testcontainers:1.15.3"
     testImplementation "org.testcontainers:kafka:1.15.3"
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '2.8.0'
 }
 

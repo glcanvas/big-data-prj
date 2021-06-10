@@ -5,7 +5,7 @@ import java.lang.IllegalArgumentException
 interface Typable {
     fun type(): Type
 
-    enum class Type(public val messageType: String) {
+    enum class Type(val messageType: String) {
         RESPONSE_POST("ResponsePost"),
         RESPONSE_COMMENT("ResponseComment"),
         REQUEST_POST("RequestPost"),
