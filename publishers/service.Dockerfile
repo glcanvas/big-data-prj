@@ -58,6 +58,8 @@ RUN rm -rf /opt/apps \
     && echo "===============" \
     && ls -al /root
 
+RUN rm -rf /var/data
+RUN mkdir /var/data
 
 RUN cd /root \
     && git clone https://github.com/glcanvas/big-data-prj.git \
@@ -75,8 +77,5 @@ RUN mv /root/big-data-prj/${SAVER}/build/libs/${SAVER}-1-all.jar /opt/apps/${SAV
 COPY ./microservice-launcher.sh /opt/apps/microservice-launcher.sh
 
 RUN chmod u+x /opt/apps/microservice-launcher.sh
-
-RUN rm -rf /var/data
-RUN mkdir /var/data
 
 CMD ["sh", "-c", "/opt/apps/microservice-launcher.sh"]
