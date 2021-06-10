@@ -2,6 +2,12 @@
 1. Recognize text on the given image with `tesseract` OCR;
 2. Predict toxicity of the text using ML model. 
 
+## Preparation
+exec into container with jupyter notebook
+
+execute apt-update
+
+
 ## OCR
 We are using Tesseract -- Open-Source OCR model, detecting russian and english languages (in our case).
 ### Usage:
